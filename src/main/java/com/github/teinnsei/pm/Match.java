@@ -115,28 +115,28 @@ public final class Match<T, R> {
         return returned;
     }
 
-    public R orDefault(final R defaultValue) {
+    public R or(final R defaultValue) {
         if (returned == null) {
             return defaultValue;
         }
         return returned;
     }
 
-    public R orDefault(final Supplier<R> defaultValue) {
+    public R or(final Supplier<R> defaultValue) {
         if (returned == null) {
             return defaultValue.get();
         }
         return returned;
     }
 
-    public R orDefault(final Function<T, R> defaultValue) {
+    public R or(final Function<T, R> defaultValue) {
         if (returned == null) {
             return defaultValue.apply(value);
         }
         return returned;
     }
 
-    public <E extends RuntimeException> R orDefault(final ExceptionSupplier<E> defaultValue) {
+    public <E extends RuntimeException> R exceptionally(final ExceptionSupplier<E> defaultValue) {
         final var r = returned;
         if (r == null) {
             throw defaultValue.get();
@@ -144,20 +144,24 @@ public final class Match<T, R> {
         return r;
     }
 
-    public R or(final R defaultValue) {
-        return orDefault(defaultValue);
+    public Partial<R> partial() {
+        return new Partial<>(returned);
     }
 
-    public R or(final Supplier<R> defaultValue) {
-        return orDefault(defaultValue);
+    public Partial<R> partial(final R defaultValue) {
+        return new Partial<>(defaultValue);
     }
 
-    public R or(final Function<T, R> defaultValue) {
-        return orDefault(defaultValue);
+    public Partial<R> partial(final Supplier<R> defaultValue) {
+        return new Partial<>(or(defaultValue));
     }
 
-    public <E extends RuntimeException> R exceptionally(final ExceptionSupplier<E> defaultValue) {
-        return orDefault(defaultValue);
+    public Partial<R> partial(final Function<T, R> defaultValue) {
+        return new Partial<>(or(defaultValue));
+    }
+
+    public <E extends RuntimeException> Partial<R> partial(final ExceptionSupplier<E> defaultValue) {
+        return new Partial<>(exceptionally(defaultValue));
     }
 
     public <T2> Match<T2, R> pattern(final T2 value) {

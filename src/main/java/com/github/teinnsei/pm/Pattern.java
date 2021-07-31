@@ -38,11 +38,11 @@ import java.util.function.Supplier;
 
 /**
  * public String foo(final String lhs, final String rhs) {
- *     return pattern(on(lhs, rhs))
- *             .match(on(nonNull(), nonNull()), "BOTH_NON_NULL")
- *             .match(on(isNull(), nonNull()), "RHS")
- *             .match(on(nonNull(), isNull()), "LHS")
- *             .or("BOTH_IS_NULL");
+ * return pattern(on(lhs, rhs))
+ * .match(on(nonNull(), nonNull()), "BOTH_NON_NULL")
+ * .match(on(isNull(), nonNull()), "RHS")
+ * .match(on(nonNull(), isNull()), "LHS")
+ * .or("BOTH_IS_NULL");
  * }
  *
  * @param <T> Type returned by pattern matching
@@ -139,6 +139,10 @@ public final class Pattern<T> {
 
     public static <T> Predicate<T> in(final Collection<T> collection) {
         return collection::contains;
+    }
+
+    public static <T> Predicate<T> type(final Class<? extends T> t) {
+        return Pattern.<T>nonNull().and(i -> i.getClass().equals(t));
     }
 
     private final T value;
