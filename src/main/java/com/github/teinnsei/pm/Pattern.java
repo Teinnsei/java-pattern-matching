@@ -29,6 +29,7 @@
 
 package com.github.teinnsei.pm;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -134,6 +135,10 @@ public final class Pattern<T> {
 
     public static <T> Predicate<T> is(final T value) {
         return value::equals;
+    }
+
+    public static <T> Predicate<T> in(final Collection<T> collection) {
+        return collection::contains;
     }
 
     private final T value;
